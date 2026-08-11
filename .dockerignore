@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Production/Build Output
+dist
+build
+**/dist
+**/build
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git & IDEs
+.git
+.gitignore
+.vscode
+.idea
+*.swp
+*.swo
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db

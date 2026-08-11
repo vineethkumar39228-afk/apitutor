@@ -1,0 +1,19 @@
+config:
+  # The base URL of your local server
+  target: "http://localhost:5000"
+  phases:
+    # Phase 1: Warm up the server (10 users per second for 20 seconds)
+    - duration: 20
+      arrivalRate: 10
+      name: "Warm up"
+    # Phase 2: Sustained load (50 users per second for 60 seconds)
+    - duration: 60
+      arrivalRate: 50
+      name: "Sustained max load"
+      
+scenarios:
+  - name: "Browse Problem Catalog"
+    flow:
+      # Simulate a user requesting page 1 of the Hard Algebra problems
+      - get:
+          url: "/api/questions?topic=Algebra&difficulty=Hard&page=1&limit=10"

@@ -1,0 +1,23 @@
+# Logs
+node_modules
+*.log
+dist
+dist-ssr
+*.local
+
+# Environment Overrides
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

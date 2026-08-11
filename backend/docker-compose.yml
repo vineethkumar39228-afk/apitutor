@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: apitutor_backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=${NODE_ENV:-production}
+      # Notice we use the service names 'mongo' and 'redis' instead of localhost
+      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017/apitutor}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      # Pass through existing production secrets
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - apitutor_network
+
+  mongo:
+    image: mongo:latest
+    container_name: apitutor_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - apitutor_network
+
+  redis:
+    image: redis:alpine
+    container_name: apitutor_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - apitutor_network
+
+# Define the custom bridge network
+networks:
+  apitutor_network:
+    driver: bridge
+
+# Define persistent storage volumes
+volumes:
+  mongo_data:
+  redis_data:
