@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.3",
     "mathjs": "^15.2.0",
     "mongoose": "^8.10.0",
+    "morgan": "^1.11.0",
     "redis": "^6.2.0"
   },
   "devDependencies": {

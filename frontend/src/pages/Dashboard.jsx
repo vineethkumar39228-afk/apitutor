@@ -61,7 +61,7 @@ const Dashboard = () => {
             <main className="responsive-main">
 
                 <header style={styles.header}>
-                    <h1>Welcome back, {userData?.name || 'Student'}! 👋</h1>
+                    <h1 style={styles.title}>Welcome back, {userData?.name || 'Student'}! 👋</h1>
                     <p style={styles.subtitle}>Here is an overview of your learning journey.</p>
                 </header>
 
@@ -147,6 +147,7 @@ const styles = {
     navItemActive: { color: '#ffffff', textDecoration: 'none', padding: '10px', borderRadius: '4px', backgroundColor: '#334155', fontWeight: 'bold' },
     mainContent: { flex: 1, padding: '40px', overflowY: 'auto' },
     header: { marginBottom: '30px' },
+    title: { color: '#f8fafc', fontSize: '2rem', margin: '0 0 8px 0', fontWeight: 'bold' },
     subtitle: { color: '#94a3b8', fontSize: '1.1rem', marginTop: '5px' },
     card: { backgroundColor: '#1e293b', border: '1px solid #334155', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' },
     statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' },

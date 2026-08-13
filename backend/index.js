@@ -12,6 +12,7 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 const express = require('express');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
@@ -39,6 +40,9 @@ const PORT = process.env.PORT || 5000;
 // 1. Trust Proxy
 // Tells rate limiter to read actual user IP behind Docker/Nginx proxies
 app.set('trust proxy', 1);
+
+// 2. HTTP Request Logger
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 // 2. Helmet - Secures HTTP headers
 app.use(helmet());
