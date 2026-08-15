@@ -6,15 +6,32 @@ const Problem = require('../models/Problem'); // Bring in your Mongoose model
 const Question = require('../models/Question'); // Fallback model
 const sanitizeMathInput = require('../middleware/mathSanitizer'); // Import the middleware
 const { evaluateUserStep } = require('../services/solverEngine');
+const Joi = require('joi'); // Request validation
+
+// Joi Schemas
+const solveSchema = Joi.object({
+    equation: Joi.string().required().min(1).max(200)
+});
+
+const validateStepSchema = Joi.object({
+    problemId: Joi.string().required(),
+    currentStepIndex: Joi.number().integer().min(0).required(),
+    step: Joi.string().required().min(1).max(500)
+});
+
+const hintSchema = Joi.object({
+    problemId: Joi.string().required(),
+    currentStepIndex: Joi.number().integer().min(0).required()
+});
 
 // Insert the middleware into the chain
 router.post('/solve', sanitizeMathInput, asyncHandler(async (req, res) => {
-    const { equation } = req.body;
-
-    if (!equation) {
+    const { error, value } = solveSchema.validate(req.body);
+    if (error) {
         res.status(400);
-        throw new Error('Please provide an equation to solve.');
+        throw new Error(error.details[0].message);
     }
+    const { equation } = value;
 
     // The 'equation' variable here is now fully sanitized!
     // E.g., if the user sent " 2x(x+ 3 ) ", it arrives here as "2*x*(x+3)"
@@ -39,13 +56,13 @@ router.post('/solve', sanitizeMathInput, asyncHandler(async (req, res) => {
 
 // Route: Step-by-Step Validation with Error Diagnostics and Agentic Fallback
 router.post('/validate-step', sanitizeMathInput, asyncHandler(async (req, res) => {
-    const { problemId, currentStepIndex, step } = req.body;
-
     // 1. Validate Request Body
-    if (!problemId || currentStepIndex === undefined || !step) {
+    const { error, value } = validateStepSchema.validate(req.body);
+    if (error) {
         res.status(400);
-        throw new Error('Missing required fields: problemId, currentStepIndex, or step.');
+        throw new Error(`Validation Error: ${error.details[0].message}`);
     }
+    const { problemId, currentStepIndex, step } = value;
 
     // 2. Fetch Database Record
     let problem = await Problem.findById(problemId);
@@ -95,13 +112,13 @@ router.post('/validate-step', sanitizeMathInput, asyncHandler(async (req, res) =
 // New Route: Get Contextual Hint
 // POST /api/solver/hint
 router.post('/hint', asyncHandler(async (req, res) => {
-    const { problemId, currentStepIndex } = req.body;
-
     // 1. Basic validation
-    if (!problemId || currentStepIndex === undefined) {
+    const { error, value } = hintSchema.validate(req.body);
+    if (error) {
         res.status(400);
-        throw new Error('Missing required fields: problemId or currentStepIndex.');
+        throw new Error(`Validation Error: ${error.details[0].message}`);
     }
+    const { problemId, currentStepIndex } = value;
 
     // 2. Fetch the problem from MongoDB
     let problem = await Problem.findById(problemId);

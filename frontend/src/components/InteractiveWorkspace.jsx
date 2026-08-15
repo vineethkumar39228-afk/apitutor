@@ -7,6 +7,7 @@ import { BlockMath } from 'react-katex';
 // Reusable UI components
 import Button from './ui/Button';
 import Input from './ui/Input';
+import VideoExplainer from './ui/VideoExplainer';
 
 const InteractiveWorkspace = ({ problemId: propProblemId }) => {
     const { id } = useParams();
@@ -268,26 +269,29 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
     };
 
     return (
-        <div className="workspace-container" style={{ padding: '20px', maxWidth: '700px', margin: '0 auto', color: '#f8fafc' }}>
-            <h2 style={{ color: '#f8fafc', marginBottom: '20px' }}>Interactive Math Workspace</h2>
+        <div className="workspace-container" style={{ padding: '20px', maxWidth: '700px', margin: '0 auto', color: 'var(--text-primary)' }}>
+            <h2 style={{ color: 'var(--text-primary)', marginBottom: '20px', fontFamily: 'var(--font-heading)' }}>Interactive Math Workspace</h2>
             {problemDetails && (
-                <div style={{ marginBottom: '20px', padding: '20px', background: '#1e293b', border: '1px solid #334155', borderRadius: '10px', color: '#f8fafc', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
+                <div style={{ marginBottom: '20px', padding: '20px', background: 'var(--surface-raised)', border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-lg)', color: 'var(--text-primary)', boxShadow: 'var(--shadow-md)' }} className="animate-fade-in">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '1.4rem' }}>{problemDetails.title}</h3>
+                        <h3 style={{ margin: 0, color: 'var(--brand-primary)', fontSize: '1.4rem', fontFamily: 'var(--font-heading)' }}>{problemDetails.title}</h3>
                         {problemDetails.difficulty && (
-                            <span style={{ background: '#38bdf8', color: '#0f172a', fontWeight: 'bold', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem' }}>
+                            <span className={`badge badge-${problemDetails.difficulty.toLowerCase()}`}>
                                 {problemDetails.difficulty}
                             </span>
                         )}
                     </div>
-                    <p style={{ margin: '0 0 12px 0', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
+                    <p style={{ margin: '0 0 12px 0', color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: '1.6' }}>
                         {problemDetails.problemStatement || problemDetails.description || (problemDetails.originalEquation ? `Solve the equation step by step:` : 'Solve the math problem step by step.')}
                     </p>
                     {(problemDetails.originalEquation || problemDetails.initialEquation) && (
-                        <div role="math" aria-label={`Equation: ${problemDetails.originalEquation || problemDetails.initialEquation}`} style={{ marginTop: '12px', padding: '12px', background: '#0f172a', borderRadius: '6px', borderLeft: '4px solid #38bdf8' }}>
-                            <span style={{ fontSize: '0.9rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Starting Equation:</span>
-                            <code style={{ fontSize: '1.25rem', color: '#38bdf8', fontFamily: 'monospace', fontWeight: 'bold' }}>{problemDetails.originalEquation || problemDetails.initialEquation}</code>
+                        <div role="math" aria-label={`Equation: ${problemDetails.originalEquation || problemDetails.initialEquation}`} style={{ marginTop: '12px', padding: '12px', background: 'var(--surface-base)', borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--brand-primary)' }}>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Starting Equation:</span>
+                            <code style={{ fontSize: '1.25rem', color: 'var(--brand-primary)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', background: 'transparent', padding: 0 }}>{problemDetails.originalEquation || problemDetails.initialEquation}</code>
                         </div>
+                    )}
+                    {problemDetails.videoUrl && (
+                        <VideoExplainer videoId={problemDetails.videoUrl} title={`${problemDetails.title} — Explanation`} />
                     )}
                 </div>
             )}
@@ -295,9 +299,9 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
             {/* Step-by-step Validation Section */}
             {effectiveProblemId && (
                 <div className="step-validation-section" style={{ marginBottom: '30px' }}>
-                    <h3 style={{ color: '#f8fafc' }}>Step-by-Step Solver</h3>
+                    <h3 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Step-by-Step Solver</h3>
                     {!isProblemComplete ? (
-                        <div className="step-container" style={{ margin: '20px 0', padding: '20px', background: '#1e293b', border: '1px solid #334155', borderRadius: '10px', position: 'relative' }}>
+                        <div className="step-container" style={{ margin: '20px 0', padding: '20px', background: 'var(--surface-raised)', border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-lg)', position: 'relative' }}>
 
                             {/* AI Mode Active Overlay/Indicator */}
                             {aiModeActive && (
@@ -313,7 +317,7 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
                                 </div>
                             )}
 
-                            <h4 style={{ margin: '0 0 15px 0', color: '#38bdf8', fontSize: '1.2rem' }}>Step {currentStepIndex + 1}</h4>
+                            <h4 style={{ margin: '0 0 15px 0', color: 'var(--brand-primary)', fontSize: '1.2rem', fontFamily: 'var(--font-heading)' }}>Step {currentStepIndex + 1}</h4>
 
                             <form className="workspace-form" onSubmit={handleStepSubmit} style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                                 {/* REFACTORED: Custom Input with Accessibility Label */}
@@ -353,12 +357,12 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
                                 </Button>
 
                                 {stepStatus === 'correct' && (
-                                    <span className="icon-correct" role="img" aria-label="Step correct" style={{ color: '#4ade80', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                                    <span className="icon-correct" role="img" aria-label="Step correct" style={{ color: 'var(--brand-success)', fontSize: '1.5rem', fontWeight: 'bold' }}>
                                         ✅
                                     </span>
                                 )}
                                 {stepStatus === 'incorrect' && (
-                                    <span className="icon-incorrect" role="img" aria-label="Step incorrect" style={{ color: '#f87171', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                                    <span className="icon-incorrect" role="img" aria-label="Step incorrect" style={{ color: 'var(--brand-error)', fontSize: '1.5rem', fontWeight: 'bold' }}>
                                         ❌
                                     </span>
                                 )}
@@ -375,14 +379,14 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
                                         style={{
                                             marginTop: '15px',
                                             padding: '15px',
-                                            backgroundColor: '#0c4a6e',
-                                            borderLeft: '4px solid #38bdf8',
-                                            color: '#e0f2fe',
-                                            borderRadius: '6px',
+                                            background: 'rgba(59, 130, 246, 0.1)',
+                                            borderLeft: '4px solid var(--brand-primary)',
+                                            color: 'var(--text-primary)',
+                                            borderRadius: 'var(--radius-sm)',
                                             animation: 'fadeIn 0.3s ease-in-out'
                                         }}
                                     >
-                                        <strong style={{ color: '#38bdf8' }}>Teacher's Hint: </strong> {currentHint}
+                                        <strong style={{ color: 'var(--brand-primary)' }}>Teacher's Hint: </strong> {currentHint}
                                     </div>
                                 )}
 
@@ -414,13 +418,13 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
 
                             {/* Success Message */}
                             {stepStatus === 'correct' && feedbackMessage && (
-                                <div role="status" aria-live="polite" style={{ marginTop: '15px', color: '#4ade80', fontWeight: 'bold' }}>
+                                <div role="status" aria-live="polite" style={{ marginTop: '15px', color: 'var(--brand-success)', fontWeight: 'bold' }}>
                                     {feedbackMessage}
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <div className="completion-message" style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: 'bold', margin: '20px 0', padding: '15px', background: '#064e3b', borderRadius: '8px', border: '1px solid #059669' }}>
+                        <div className="completion-message" style={{ color: 'var(--brand-success)', fontSize: '1.2rem', fontWeight: 'bold', margin: '20px 0', padding: '20px', background: 'var(--brand-success-soft)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--brand-success)' }}>
                             🎉 Congratulations! You have successfully solved the problem.
                         </div>
                     )}
@@ -429,24 +433,24 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
 
             {/* History of Submitted Steps */}
             <div className="step-history" style={{ marginBottom: '30px' }}>
-                <h3 style={{ color: '#f8fafc' }}>Solver History</h3>
+                <h3 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Solver History</h3>
                 {submittedSteps.length === 0 ? (
-                    <p style={{ color: '#94a3b8' }}>No steps submitted yet. Start typing below!</p>
+                    <p style={{ color: 'var(--text-muted)' }}>No steps submitted yet. Start typing below!</p>
                 ) : (
                     submittedSteps.map((step, index) => (
-                        <div key={step.id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', padding: '15px', marginBottom: '10px', color: '#f8fafc' }}>
-                            <strong style={{ color: '#38bdf8' }}>Step {index + 1}:</strong>
+                        <div key={step.id} style={{ backgroundColor: 'var(--surface-raised)', border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-md)', padding: '15px', marginBottom: '10px', color: 'var(--text-primary)' }}>
+                            <strong style={{ color: 'var(--brand-primary)' }}>Step {index + 1}:</strong>
                             <BlockMath math={step.equation} />
-                            <small style={{ color: '#94a3b8' }}>{step.backendMessage}</small>
+                            <small style={{ color: 'var(--text-muted)' }}>{step.backendMessage}</small>
                         </div>
                     ))
                 )}
             </div>
 
             {/* Real-time Preview Area */}
-            <div className="preview-area" style={{ minHeight: '60px', backgroundColor: '#1e293b', border: '1px solid #334155', padding: '15px', borderRadius: '8px', marginBottom: '15px', color: '#f8fafc' }}>
-                <span style={{ fontSize: '0.9rem', color: '#94a3b8', display: 'block', marginBottom: '5px' }}>Live Preview:</span>
-                <BlockMath math={currentInput || '\\text{...}'} errorColor={'#f87171'} />
+            <div className="preview-area" style={{ minHeight: '60px', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--surface-border)', padding: '15px', borderRadius: 'var(--radius-md)', marginBottom: '15px', color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', display: 'block', marginBottom: '5px' }}>Live Preview:</span>
+                <BlockMath math={currentInput || '\\text{...}'} errorColor={'var(--brand-error)'} />
             </div>
 
             {/* Input and Submit Form */}
@@ -457,20 +461,20 @@ const InteractiveWorkspace = ({ problemId: propProblemId }) => {
                     onChange={handleInputChange}
                     placeholder="e.g., 2x + 4 = 8"
                     aria-label="Solve equation input"
-                    style={{ flex: 1, padding: '10px 14px', fontSize: '1rem', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#f8fafc', outline: 'none' }}
+                    style={{ flex: 1, padding: '10px 14px', fontSize: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface-input)', color: 'var(--text-primary)', outline: 'none', fontFamily: 'var(--font-body)', transition: 'border-color var(--transition-fast)' }}
                     disabled={isLoading}
                 />
                 <button
                     type="submit"
                     disabled={isLoading}
-                    style={{ padding: '10px 20px', backgroundColor: '#38bdf8', color: '#0f172a', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
+                    style={{ padding: '10px 20px', background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-accent))', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all var(--transition-base)' }}
                 >
                     {isLoading ? 'Processing...' : 'Solve Equation'}
                 </button>
             </form>
 
             {/* Error Messaging */}
-            {error && <p style={{ color: '#f87171', marginTop: '10px' }}>{error}</p>}
+            {error && <p style={{ color: 'var(--brand-error)', marginTop: '10px' }}>{error}</p>}
         </div>
     );
 };

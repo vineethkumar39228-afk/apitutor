@@ -1,12 +1,33 @@
 const mongoose = require('mongoose');
 
+// Schema for individual logical steps
+const stepSchema = new mongoose.Schema({
+    stepNumber: { type: Number, required: true },
+    instruction: { type: String, required: true },
+    formula: { type: String }
+});
+
 const problemSchema = new mongoose.Schema({
     title: { type: String, required: true },
     originalEquation: { type: String, required: true },
-    expectedSteps: [{ type: String, required: true }],
+    expectedSteps: [stepSchema],
     hints: [{ type: String }],
-    topic: { type: String, required: true, default: 'General Math' },
-    difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], default: 'Medium' }
+    topic: {
+        type: String,
+        required: true,
+        default: 'General Math',
+        enum: [
+            'General Math', 'Algebra', 'Calculus', 'Fractions',
+            'Percentages', 'Time & Work', 'Probability',
+            'Geometry', 'Number Systems', 'Data Interpretation'
+        ]
+    },
+    difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], default: 'Medium' },
+    videoUrl: {
+        type: String,
+        trim: true,
+        // Store YouTube Video ID only (e.g., "dQw4w9WgXcQ") for lightweight embedding
+    }
 }, { timestamps: true });
 
 // --- Add Indexes ---

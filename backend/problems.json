@@ -1,0 +1,399 @@
+[
+    {
+        "title": "Solving a Linear Equation",
+        "problemStatement": "Solve for x in the given linear equation.",
+        "originalEquation": "3x - 5 = 10",
+        "topic": "Algebra",
+        "difficulty": "Easy",
+        "finalAnswer": "5",
+        "videoUrl": "bAeOpXy2M2g",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Add 5 to both sides.",
+                "formula": "3x = 15"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Divide by 3 on both sides to isolate x.",
+                "formula": "x = 5"
+            }
+        ],
+        "hints": [
+            "Try moving the constant term to the right side first.",
+            "Divide both sides by the coefficient of x."
+        ]
+    },
+    {
+        "title": "Adding Fractions with Different Denominators",
+        "problemStatement": "Add the fractions and simplify.",
+        "originalEquation": "1/2 + 1/3 = x",
+        "topic": "Fractions",
+        "difficulty": "Easy",
+        "finalAnswer": "5/6",
+        "videoUrl": "5juto2ze8Lg",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Find a common denominator, which is 6.",
+                "formula": "3/6 + 2/6 = x"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Add the numerators.",
+                "formula": "x = 5/6"
+            }
+        ],
+        "hints": [
+            "The least common multiple of 2 and 3 is 6."
+        ]
+    },
+    {
+        "title": "Finding a Percentage",
+        "problemStatement": "Find 20% of 150.",
+        "originalEquation": "0.20 * 150 = x",
+        "topic": "Percentages",
+        "difficulty": "Easy",
+        "finalAnswer": "30",
+        "videoUrl": "rR95Cbcjzus",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Convert the percentage to a decimal.",
+                "formula": "0.20 * 150 = x"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Multiply the decimal by the whole number.",
+                "formula": "x = 30"
+            }
+        ],
+        "hints": [
+            "20% is the same as 0.20 or 1/5."
+        ]
+    },
+    {
+        "title": "Area of a Rectangle",
+        "problemStatement": "Find the area of a rectangle with length 8 and width 5.",
+        "originalEquation": "8 * 5 = x",
+        "topic": "Geometry",
+        "difficulty": "Easy",
+        "finalAnswer": "40",
+        "videoUrl": "xCdxURXMdFY",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Multiply length by width.",
+                "formula": "x = 40"
+            }
+        ],
+        "hints": [
+            "The formula for the area of a rectangle is length times width."
+        ]
+    },
+    {
+        "title": "Identifying Prime Numbers",
+        "problemStatement": "Find the sum of the first three prime numbers.",
+        "originalEquation": "2 + 3 + 5 = x",
+        "topic": "Number Systems",
+        "difficulty": "Easy",
+        "finalAnswer": "10",
+        "videoUrl": "mB5vXv_9D6s",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "List the first three prime numbers.",
+                "formula": "2, 3, 5"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Add them together.",
+                "formula": "x = 10"
+            }
+        ],
+        "hints": [
+            "1 is not considered a prime number.",
+            "The smallest prime number is an even number."
+        ]
+    },
+    {
+        "title": "Order of Operations",
+        "problemStatement": "Evaluate the expression using PEMDAS.",
+        "originalEquation": "5 + 3 * (8 - 2) = x",
+        "topic": "General Math",
+        "difficulty": "Medium",
+        "finalAnswer": "23",
+        "videoUrl": "dAgfnK528RA",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Evaluate the expression inside the parentheses.",
+                "formula": "5 + 3 * 6 = x"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Perform the multiplication.",
+                "formula": "5 + 18 = x"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Add the remaining numbers.",
+                "formula": "x = 23"
+            }
+        ],
+        "hints": [
+            "Remember PEMDAS: Parentheses first, then multiplication before addition."
+        ]
+    },
+    {
+        "title": "Time and Work Concept",
+        "problemStatement": "If Person A takes 6 days to finish a job and Person B takes 3 days, how long do they take working together?",
+        "originalEquation": "1/6 + 1/3 = 1/x",
+        "topic": "Time & Work",
+        "difficulty": "Medium",
+        "finalAnswer": "2",
+        "videoUrl": "3R42y4hR-fM",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Find their combined work rate per day.",
+                "formula": "1/6 + 2/6 = 3/6"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Simplify the fraction.",
+                "formula": "1/2 = 1/x"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Invert to find the total days required.",
+                "formula": "x = 2"
+            }
+        ],
+        "hints": [
+            "Calculate the fraction of the work each person completes in one single day."
+        ]
+    },
+    {
+        "title": "Basic Probability",
+        "problemStatement": "What is the probability of rolling a sum of 7 with two standard six-sided dice?",
+        "originalEquation": "6 / 36 = x",
+        "topic": "Probability",
+        "difficulty": "Medium",
+        "finalAnswer": "1/6",
+        "videoUrl": "KzfWUEJjG18",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Determine the total number of possible outcomes.",
+                "formula": "36"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Count the number of ways to roll a 7.",
+                "formula": "6"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Divide successful outcomes by total outcomes and simplify.",
+                "formula": "x = 1/6"
+            }
+        ],
+        "hints": [
+            "There are 6 * 6 = 36 possible outcomes when rolling two dice."
+        ]
+    },
+    {
+        "title": "Solving a Quadratic Equation",
+        "problemStatement": "Find the larger root of the quadratic equation.",
+        "originalEquation": "x^2 - 5x + 6 = 0",
+        "topic": "Algebra",
+        "difficulty": "Medium",
+        "finalAnswer": "3",
+        "videoUrl": "SDe-1lGeS0U",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Factor the quadratic equation.",
+                "formula": "(x - 2)(x - 3) = 0"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Set each factor to zero to solve for the roots.",
+                "formula": "x = 2, x = 3"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Select the larger root.",
+                "formula": "x = 3"
+            }
+        ],
+        "hints": [
+            "Find two numbers that multiply to 6 and add up to -5."
+        ]
+    },
+    {
+        "title": "Pythagorean Theorem",
+        "problemStatement": "Find the hypotenuse of a right triangle with legs of length 6 and 8.",
+        "originalEquation": "6^2 + 8^2 = c^2",
+        "topic": "Geometry",
+        "difficulty": "Medium",
+        "finalAnswer": "10",
+        "videoUrl": "AA621UofTUA",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Square the lengths of the given legs.",
+                "formula": "36 + 64 = c^2"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Add the squares together.",
+                "formula": "100 = c^2"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Take the square root to find the hypotenuse.",
+                "formula": "c = 10"
+            }
+        ],
+        "hints": [
+            "Use the Pythagorean theorem formula: a^2 + b^2 = c^2."
+        ]
+    },
+    {
+        "title": "Evaluating a First Derivative",
+        "problemStatement": "Find the value of the derivative of the polynomial evaluated at x = 1.",
+        "originalEquation": "d/dx(3x^3 + 2x^2) at x = 1",
+        "topic": "Calculus",
+        "difficulty": "Hard",
+        "finalAnswer": "13",
+        "videoUrl": "5yfhNM8NgzU",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Apply the power rule to take the derivative of the expression.",
+                "formula": "9x^2 + 4x"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Substitute x = 1 into the newly found derivative.",
+                "formula": "9(1)^2 + 4(1) = 13"
+            }
+        ],
+        "hints": [
+            "The power rule states that the derivative of ax^n is a*n*x^(n-1)."
+        ]
+    },
+    {
+        "title": "Compound Average Growth Rate",
+        "problemStatement": "If a company's revenue grows from $100 to $144 over 2 years, find the annual compound growth rate as a decimal.",
+        "originalEquation": "100 * (1 + r)^2 = 144",
+        "topic": "Data Interpretation",
+        "difficulty": "Hard",
+        "finalAnswer": "0.20",
+        "videoUrl": "vJ9J8-pZ0Kk",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Divide both sides by 100.",
+                "formula": "(1 + r)^2 = 1.44"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Take the square root of both sides.",
+                "formula": "1 + r = 1.20"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Subtract 1 to isolate r.",
+                "formula": "r = 0.20"
+            }
+        ],
+        "hints": [
+            "Use the standard compound interest formula: A = P(1+r)^t."
+        ]
+    },
+    {
+        "title": "Conditional Probability",
+        "problemStatement": "Given P(A) = 0.5, P(B) = 0.4, and P(A and B) = 0.2, find P(A|B).",
+        "originalEquation": "P(A|B) = P(A and B) / P(B)",
+        "topic": "Probability",
+        "difficulty": "Hard",
+        "finalAnswer": "0.5",
+        "videoUrl": "ibINrxJLvlM",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Plug the known values into the conditional probability formula.",
+                "formula": "P(A|B) = 0.2 / 0.4"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Simplify the division.",
+                "formula": "P(A|B) = 0.5"
+            }
+        ],
+        "hints": [
+            "P(A|B) means the probability of A given B. Check the formula for conditional probability."
+        ]
+    },
+    {
+        "title": "Evaluating a Definite Integral",
+        "problemStatement": "Evaluate the integral of 2x from 0 to 3.",
+        "originalEquation": "int_0^3 2x dx",
+        "topic": "Calculus",
+        "difficulty": "Hard",
+        "finalAnswer": "9",
+        "videoUrl": "qcxJjYivU4o",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Find the antiderivative of 2x.",
+                "formula": "x^2"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Evaluate the bounds from 0 to 3 using the Fundamental Theorem of Calculus.",
+                "formula": "3^2 - 0^2"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Calculate the final value.",
+                "formula": "9"
+            }
+        ],
+        "hints": [
+            "The antiderivative of x^n is (x^(n+1))/(n+1)."
+        ]
+    },
+    {
+        "title": "Advanced Work Rate with Opposing Forces",
+        "problemStatement": "Pipe A fills a tank in 4 hours. Pipe B empties it in 6 hours. If both are open, how many hours will it take to fill the tank?",
+        "originalEquation": "1/4 - 1/6 = 1/x",
+        "topic": "Time & Work",
+        "difficulty": "Hard",
+        "finalAnswer": "12",
+        "videoUrl": "K_h161_c9lE",
+        "expectedSteps": [
+            {
+                "stepNumber": 1,
+                "instruction": "Set up the rate equation. Remember that filling is positive and emptying is negative.",
+                "formula": "1/4 - 1/6 = 1/x"
+            },
+            {
+                "stepNumber": 2,
+                "instruction": "Find a common denominator (12) and subtract.",
+                "formula": "3/12 - 2/12 = 1/12"
+            },
+            {
+                "stepNumber": 3,
+                "instruction": "Invert the result to find the total time.",
+                "formula": "x = 12"
+            }
+        ],
+        "hints": [
+            "Subtract the emptying rate from the filling rate to find the net fill rate."
+        ]
+    }
+]

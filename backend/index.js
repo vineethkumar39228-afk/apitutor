@@ -72,7 +72,14 @@ app.use('/api/users/register', authLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 
-// 4. Apply General Middlewares
+// 5. Strict Solver/AI Rate Limiter (Protection for Gemini API limits)
+const solverLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 50, // Limit each IP to 50 solver requests per 15 minutes
+    message: { message: 'Too many problem solving attempts. Please try again after 15 minutes.' },
+});
+
+// Apply General Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
@@ -95,11 +102,11 @@ app.use(cors({
     credentials: true
 }));
 
-// 5. Define API Routes
+// 6. Define API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/questions', questionRoutes);
-app.use('/api/solver', solverRoutes);
+app.use('/api/solver', solverLimiter, solverRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/analytics', analyticsRoutes);
 

@@ -2,30 +2,32 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 
+const TOPICS = [
+    'Algebra', 'Calculus', 'Fractions', 'General Math',
+    'Percentages', 'Time & Work', 'Probability',
+    'Geometry', 'Number Systems', 'Data Interpretation'
+];
+
 const ProblemCatalog = () => {
-    // State for data and pagination
     const [problems, setProblems] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // State for filters
     const [searchTerm, setSearchTerm] = useState('');
     const [topicFilter, setTopicFilter] = useState('');
     const [difficultyFilter, setDifficultyFilter] = useState('');
 
     const navigate = useNavigate();
 
-    // Function to fetch data based on current state
     const fetchProblems = useCallback(async (pageToFetch = 1) => {
         setIsLoading(true);
         setError('');
 
         try {
-            // Build the query string dynamically
             const params = new URLSearchParams({
                 page: pageToFetch,
-                limit: 10,
+                limit: 12,
             });
 
             if (searchTerm) params.append('search', searchTerm);
@@ -44,15 +46,13 @@ const ProblemCatalog = () => {
         }
     }, [searchTerm, topicFilter, difficultyFilter]);
 
-    // Fetch initial data on mount
     useEffect(() => {
         fetchProblems(1);
-    }, []); // Run once on mount. We use a manual button trigger for searches.
+    }, []);
 
-    // Handlers
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        fetchProblems(1); // Reset to page 1 on new search
+        fetchProblems(1);
     };
 
     const handleClearFilters = () => {
@@ -62,26 +62,26 @@ const ProblemCatalog = () => {
         setTimeout(() => fetchProblems(1), 0);
     };
 
-    // Helper for difficulty colors
-    const getDifficultyColor = (diff) => {
+    const getDifficultyClass = (diff) => {
         switch (diff?.toLowerCase()) {
-            case 'easy': return { bg: '#dcfce7', text: '#166534' };
-            case 'medium': return { bg: '#fef9c3', text: '#854d0e' };
-            case 'hard': return { bg: '#fee2e2', text: '#991b1b' };
-            default: return { bg: '#f1f5f9', text: '#475569' };
+            case 'easy': return 'badge badge-easy';
+            case 'medium': return 'badge badge-medium';
+            case 'hard': return 'badge badge-hard';
+            default: return 'badge';
         }
     };
 
     return (
         <div style={styles.container}>
-            <header style={styles.header}>
-                <h1>Problem Catalog</h1>
-                <p style={{ color: '#64748b' }}>Browse and search for math problems to practice.</p>
+            <header style={styles.header} className="animate-fade-in">
+                <h1 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', margin: '0 0 8px 0' }}>
+                    📚 Problem Catalog
+                </h1>
+                <p style={{ color: 'var(--text-secondary)', margin: 0 }}>Browse and search for math problems to practice.</p>
             </header>
 
             {/* --- Filter & Search Controls --- */}
-            <form onSubmit={handleSearchSubmit} style={styles.filterSection}>
-
+            <form onSubmit={handleSearchSubmit} style={styles.filterSection} className="workspace-form">
                 <input
                     type="text"
                     placeholder="Search equations or keywords..."
@@ -96,10 +96,7 @@ const ProblemCatalog = () => {
                     style={styles.selectInput}
                 >
                     <option value="">All Topics</option>
-                    <option value="Algebra">Algebra</option>
-                    <option value="Calculus">Calculus</option>
-                    <option value="Fractions">Fractions</option>
-                    <option value="General Math">General Math</option>
+                    {TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
 
                 <select
@@ -118,48 +115,75 @@ const ProblemCatalog = () => {
             </form>
 
             {/* --- Problem List --- */}
-            {error && <div style={{ color: 'red', margin: '20px 0' }}>⚠️ {error}</div>}
+            {error && <div style={{ color: 'var(--brand-error)', margin: '20px 0', padding: '12px', background: 'var(--brand-error-soft)', borderRadius: 'var(--radius-sm)' }}>⚠️ {error}</div>}
 
             {isLoading ? (
-                <div style={{ textAlign: 'center', padding: '50px 0', color: '#64748b' }}>
-                    <h3>Loading problems...</h3>
+                <div style={styles.grid} className="problems-grid">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <div key={i} style={{ ...styles.card, minHeight: '180px' }}>
+                            <div className="skeleton-row" style={{ height: '16px', width: '60%', marginBottom: '12px' }} />
+                            <div className="skeleton-row" style={{ height: '24px', width: '80%', marginBottom: '12px' }} />
+                            <div className="skeleton-row" style={{ height: '40px', width: '100%', marginBottom: '16px' }} />
+                            <div className="skeleton-row" style={{ height: '36px', width: '100%' }} />
+                        </div>
+                    ))}
                 </div>
             ) : (
-                <div style={styles.grid}>
+                <div style={styles.grid} className="problems-grid">
                     {problems && problems.length > 0 ? (
-                        problems.map((problem) => {
-                            const diffStyle = getDifficultyColor(problem.difficulty);
-                            return (
-                                <div key={problem._id} style={styles.card}>
-                                    <div style={styles.cardHeader}>
-                                        <span style={styles.topicBadge}>{problem.topic || 'General Math'}</span>
-                                        <span style={{
-                                            ...styles.difficultyBadge,
-                                            backgroundColor: diffStyle.bg,
-                                            color: diffStyle.text
-                                        }}>
-                                            {problem.difficulty || 'Medium'}
-                                        </span>
-                                    </div>
-
-                                    <h3 style={{ margin: '15px 0 5px 0', color: '#0f172a' }}>{problem.title}</h3>
-                                    <div role="math" aria-label={`Equation: ${problem.originalEquation || problem.title}`}>
-                                        <span className="sr-only">{problem.originalEquation || problem.title}</span>
-                                        <code aria-hidden="true" style={styles.equationDisplay}>{problem.originalEquation}</code>
-                                    </div>
-
-                                    <button
-                                        onClick={() => navigate(`/problem/${problem._id}`)}
-                                        style={{ ...styles.primaryButton, width: '100%', marginTop: '20px' }}
-                                    >
-                                        Solve Problem
-                                    </button>
+                        problems.map((problem, index) => (
+                            <div
+                                key={problem._id}
+                                style={{ ...styles.card, animationDelay: `${index * 50}ms` }}
+                                className="animate-slide-up"
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.borderColor = 'var(--brand-primary)';
+                                    e.currentTarget.style.boxShadow = 'var(--shadow-glow)';
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.borderColor = 'var(--surface-border)';
+                                    e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                }}
+                            >
+                                <div style={styles.cardHeader}>
+                                    <span className="badge badge-topic">{problem.topic || 'General Math'}</span>
+                                    <span className={getDifficultyClass(problem.difficulty)}>
+                                        {problem.difficulty || 'Medium'}
+                                    </span>
                                 </div>
-                            )
-                        })
+
+                                <h3 style={{ margin: '15px 0 5px 0', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '1.05rem' }}>
+                                    {problem.title}
+                                </h3>
+
+                                <div role="math" aria-label={`Equation: ${problem.originalEquation || problem.title}`}>
+                                    <span className="sr-only">{problem.originalEquation || problem.title}</span>
+                                    <code aria-hidden="true" style={styles.equationDisplay}>
+                                        {problem.originalEquation}
+                                    </code>
+                                </div>
+
+                                <button
+                                    onClick={() => navigate(`/problem/${problem._id}`)}
+                                    style={styles.solveButton}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-1px)';
+                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = 'none';
+                                    }}
+                                >
+                                    Solve Problem →
+                                </button>
+                            </div>
+                        ))
                     ) : (
-                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#64748b' }}>
-                            No problems found matching your filters.
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
+                            <p style={{ fontSize: '1.1rem' }}>No problems found matching your filters.</p>
                         </div>
                     )}
                 </div>
@@ -176,7 +200,7 @@ const ProblemCatalog = () => {
                         ← Previous
                     </button>
 
-                    <span style={{ color: '#475569', fontWeight: 'bold' }}>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>
                         Page {pagination.page} of {pagination.pages}
                     </span>
 
@@ -193,27 +217,75 @@ const ProblemCatalog = () => {
     );
 };
 
-// --- Styling ---
 const styles = {
-    container: { padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' },
+    container: { padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'var(--font-body)' },
     header: { marginBottom: '30px' },
     filterSection: {
-        display: 'flex', gap: '15px', flexWrap: 'wrap', backgroundColor: '#f8fafc',
-        padding: '20px', borderRadius: '8px', marginBottom: '30px', border: '1px solid #e2e8f0'
+        display: 'flex', gap: '12px', flexWrap: 'wrap',
+        background: 'var(--surface-raised)',
+        padding: '20px', borderRadius: 'var(--radius-lg)',
+        marginBottom: '30px', border: '1px solid var(--surface-border)',
+        boxShadow: 'var(--shadow-sm)'
     },
-    searchInput: { flex: 2, minWidth: '200px', padding: '10px 15px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' },
-    selectInput: { flex: 1, minWidth: '150px', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', backgroundColor: 'white' },
-    primaryButton: { backgroundColor: '#0ea5e9', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' },
-    secondaryButton: { backgroundColor: '#e2e8f0', color: '#475569', padding: '10px 20px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' },
-    card: { backgroundColor: 'white', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' },
+    searchInput: {
+        flex: 2, minWidth: '200px', padding: '10px 15px',
+        borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-border)',
+        outline: 'none', backgroundColor: 'var(--surface-input)', color: 'var(--text-primary)',
+        fontFamily: 'var(--font-body)', fontSize: '0.95rem',
+        transition: 'border-color var(--transition-fast)'
+    },
+    selectInput: {
+        flex: 1, minWidth: '150px', padding: '10px',
+        borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-border)',
+        outline: 'none', backgroundColor: 'var(--surface-input)', color: 'var(--text-primary)',
+        fontFamily: 'var(--font-body)'
+    },
+    primaryButton: {
+        background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-accent))',
+        color: 'white', padding: '10px 20px', border: 'none',
+        borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600,
+        fontFamily: 'var(--font-body)', transition: 'all var(--transition-base)'
+    },
+    secondaryButton: {
+        backgroundColor: 'var(--surface-overlay)', color: 'var(--text-primary)',
+        padding: '10px 20px', border: '1px solid var(--surface-border)',
+        borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600,
+        fontFamily: 'var(--font-body)'
+    },
+    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' },
+    card: {
+        background: 'var(--surface-raised)', padding: '22px',
+        borderRadius: 'var(--radius-lg)', border: '1px solid var(--surface-border)',
+        boxShadow: 'var(--shadow-md)', display: 'flex', flexDirection: 'column',
+        transition: 'all var(--transition-base)', cursor: 'default'
+    },
     cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    topicBadge: { backgroundColor: '#f1f5f9', color: '#475569', padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 'bold' },
-    difficultyBadge: { padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 'bold' },
-    equationDisplay: { display: 'block', backgroundColor: '#f8fafc', padding: '10px', borderRadius: '4px', borderLeft: '3px solid #0ea5e9', color: '#334155', marginTop: '10px', overflowX: 'auto' },
+    equationDisplay: {
+        display: 'block', backgroundColor: 'var(--surface-base)', padding: '12px',
+        borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--brand-primary)',
+        color: 'var(--brand-primary)', marginTop: '10px', overflowX: 'auto',
+        fontFamily: 'var(--font-mono)', fontSize: '0.95rem'
+    },
+    solveButton: {
+        background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-accent))',
+        color: 'white', padding: '10px 20px', border: 'none',
+        borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600,
+        fontFamily: 'var(--font-body)', width: '100%', marginTop: 'auto',
+        paddingTop: '12px', paddingBottom: '12px',
+        transition: 'all var(--transition-base)', fontSize: '0.95rem'
+    },
     pagination: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginTop: '40px' },
-    pageButton: { backgroundColor: '#ffffff', color: '#0ea5e9', padding: '8px 16px', border: '1px solid #0ea5e9', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s' },
-    pageButtonDisabled: { backgroundColor: '#f1f5f9', color: '#94a3b8', padding: '8px 16px', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'not-allowed', fontWeight: 'bold' }
+    pageButton: {
+        background: 'transparent', color: 'var(--brand-primary)', padding: '8px 16px',
+        border: '1px solid var(--brand-primary)', borderRadius: 'var(--radius-sm)',
+        cursor: 'pointer', fontWeight: 600, transition: 'all var(--transition-base)',
+        fontFamily: 'var(--font-body)'
+    },
+    pageButtonDisabled: {
+        background: 'var(--surface-overlay)', color: 'var(--text-muted)', padding: '8px 16px',
+        border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-sm)',
+        cursor: 'not-allowed', fontWeight: 600, fontFamily: 'var(--font-body)'
+    }
 };
 
 export default ProblemCatalog;

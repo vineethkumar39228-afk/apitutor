@@ -21,6 +21,10 @@ const progressSchema = new mongoose.Schema({
     },
     completedAt: {
         type: Date
+    },
+    pointsEarned: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 

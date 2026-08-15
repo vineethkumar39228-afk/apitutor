@@ -9,7 +9,6 @@ const Leaderboard = () => {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                // Fetching from the Redis-cached endpoint using custom api client
                 const response = await api.get('/analytics/leaderboard');
                 setLeaderboardData(response.data.leaderboard);
             } catch (err) {
@@ -22,67 +21,77 @@ const Leaderboard = () => {
         fetchLeaderboard();
     }, []);
 
-    // Helper function to assign medals to the top 3
     const getRankBadge = (index) => {
         switch (index) {
             case 0: return '🥇';
             case 1: return '🥈';
             case 2: return '🥉';
-            default: return <span style={{ padding: '0 8px', color: '#64748b' }}>{index + 1}</span>;
+            default: return <span style={{ padding: '0 8px', color: 'var(--text-muted)', fontFamily: 'var(--font-heading)', fontWeight: 700 }}>{index + 1}</span>;
         }
+    };
+
+    const getRowStyle = (index) => {
+        const base = {
+            ...styles.row,
+            animationDelay: `${index * 60}ms`,
+        };
+        if (index === 0) return { ...base, background: 'linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.12))', border: '1px solid var(--brand-primary)' };
+        if (index === 1) return { ...base, background: 'rgba(59,130,246,0.06)', border: '1px solid var(--surface-border)' };
+        if (index === 2) return { ...base, background: 'rgba(139,92,246,0.06)', border: '1px solid var(--surface-border)' };
+        return { ...base, border: '1px solid var(--surface-border)' };
     };
 
     return (
         <div style={styles.container}>
             <header style={styles.header}>
-                <h2 style={{ margin: 0, color: '#0f172a' }}>Global Leaderboard</h2>
-                <p style={{ margin: '5px 0 0 0', color: '#64748b', fontSize: '0.9rem' }}>
+                <h2 style={{ margin: 0, color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
+                    🏆 Global Leaderboard
+                </h2>
+                <p style={{ margin: '5px 0 0 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                     Top students by completed problems.
                 </p>
             </header>
 
-            {error && <div style={{ color: 'red', marginBottom: '15px' }}>⚠️ {error}</div>}
+            {error && (
+                <div style={{ color: 'var(--brand-error)', marginBottom: '15px', padding: '12px', background: 'var(--brand-error-soft)', borderRadius: 'var(--radius-sm)' }}>
+                    ⚠️ {error}
+                </div>
+            )}
 
             <div style={styles.listContainer}>
-                {/* Render Skeletons if loading */}
                 {isLoading ? (
-                    // Create an array of 10 empty items to render the skeleton structure
                     Array.from(new Array(10)).map((_, index) => (
                         <div key={index} className="skeleton-row" style={{ display: 'flex', alignItems: 'center', padding: '10px 15px' }}>
-                            <div style={{ height: '20px', width: '30px', borderRadius: '4px', backgroundColor: '#e2e8f0', marginRight: '15px' }}></div>
-                            <div style={{ height: '20px', width: '40%', borderRadius: '4px', backgroundColor: '#e2e8f0' }}></div>
-                            <div style={{ height: '20px', width: '60px', borderRadius: '4px', backgroundColor: '#e2e8f0', marginLeft: 'auto' }}></div>
+                            <div style={{ height: '20px', width: '30px', borderRadius: '4px', backgroundColor: 'var(--surface-overlay)', marginRight: '15px' }}></div>
+                            <div style={{ height: '20px', width: '40%', borderRadius: '4px', backgroundColor: 'var(--surface-overlay)' }}></div>
+                            <div style={{ height: '20px', width: '60px', borderRadius: '4px', backgroundColor: 'var(--surface-overlay)', marginLeft: 'auto' }}></div>
                         </div>
                     ))
                 ) : (
-                    /* Render Actual Data if loaded */
                     leaderboardData.length > 0 ? (
                         leaderboardData.map((user, index) => (
                             <div
                                 key={user.userId}
-                                style={{
-                                    ...styles.row,
-                                    backgroundColor: index === 0 ? '#fffbeb' : index === 1 ? '#f8fafc' : index === 2 ? '#fff1f2' : 'white',
-                                    border: index === 0 ? '1px solid #fde68a' : '1px solid #e2e8f0'
-                                }}
+                                style={getRowStyle(index)}
+                                className="animate-slide-up"
                             >
                                 <div style={styles.rankCol}>
                                     {getRankBadge(index)}
                                 </div>
 
                                 <div style={styles.nameCol}>
-                                    <strong>{user.name}</strong>
+                                    <strong style={{ color: 'var(--text-primary)' }}>{user.name}</strong>
                                 </div>
 
                                 <div style={styles.scoreCol}>
-                                    <span style={styles.scoreNumber}>{user.totalSolved}</span>
+                                    <span style={styles.scoreNumber}>{user.totalSolved || user.totalScore || 0}</span>
                                     <span style={styles.scoreLabel}> solved</span>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
-                            No data available yet. Be the first to solve a problem!
+                        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                            No data available yet. Be the first to solve a problem! 🚀
                         </div>
                     )
                 )}
@@ -91,21 +100,21 @@ const Leaderboard = () => {
     );
 };
 
-// --- Component Styling ---
 const styles = {
     container: {
-        backgroundColor: '#ffffff',
-        borderRadius: '12px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        padding: '25px',
-        maxWidth: '500px',
+        background: 'var(--surface-raised)',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--shadow-lg)',
+        border: '1px solid var(--surface-border)',
+        padding: '28px',
+        maxWidth: '560px',
         margin: '0 auto',
-        fontFamily: 'sans-serif'
+        fontFamily: 'var(--font-body)'
     },
     header: {
-        marginBottom: '20px',
-        borderBottom: '1px solid #e2e8f0',
-        paddingBottom: '15px'
+        marginBottom: '24px',
+        borderBottom: '1px solid var(--surface-border)',
+        paddingBottom: '16px'
     },
     listContainer: {
         display: 'flex',
@@ -115,9 +124,10 @@ const styles = {
     row: {
         display: 'flex',
         alignItems: 'center',
-        padding: '12px 15px',
-        borderRadius: '8px',
-        transition: 'transform 0.1s ease',
+        padding: '14px 16px',
+        borderRadius: 'var(--radius-md)',
+        background: 'var(--surface-raised)',
+        transition: 'all var(--transition-fast)',
     },
     rankCol: {
         width: '40px',
@@ -127,19 +137,19 @@ const styles = {
     },
     nameCol: {
         flex: 1,
-        paddingLeft: '10px',
-        color: '#334155'
+        paddingLeft: '12px',
     },
     scoreCol: {
         textAlign: 'right'
     },
     scoreNumber: {
-        fontWeight: '900',
-        color: '#0ea5e9',
-        fontSize: '1.1rem'
+        fontWeight: 800,
+        color: 'var(--brand-primary)',
+        fontSize: '1.1rem',
+        fontFamily: 'var(--font-heading)'
     },
     scoreLabel: {
-        color: '#64748b',
+        color: 'var(--text-muted)',
         fontSize: '0.85rem'
     }
 };
